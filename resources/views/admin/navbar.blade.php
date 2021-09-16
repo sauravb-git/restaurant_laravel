@@ -31,6 +31,7 @@
             <span class="menu-title">Chefs</span>
           </a>
         </li>
+
         <li class="nav-item menu-items">
           <a class="nav-link" href="{{url('/viewreservation')}}">
             <span class="menu-icon">
@@ -39,6 +40,18 @@
             <span class="menu-title">Reservations</span>
           </a>
         </li>
+
+        <li class="nav-item menu-items">
+            <a class="nav-link" href="{{url('/order')}}">
+              <span class="menu-icon">
+                <i class="mdi mdi-table-large"></i>
+              </span>
+              <span class="menu-title">Order</span>
+            </a>
+          </li>
+
+
+
 
       </ul>
     </nav>

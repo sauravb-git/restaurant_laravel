@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Food;
 use App\Models\Foodchef;
 use App\Models\Cart;
+use App\Models\Order;
 use App\Models\User;
 
 class HomeController extends Controller{
@@ -14,7 +15,11 @@ class HomeController extends Controller{
         $data=food::all();
         $data2=foodchef::all();
         $user = User::all();
-        return view("home",compact("data","data2","user"));
+
+        $user_id = Auth::id();
+        $count=Cart::where('user_id',$user_id)->count();
+
+        return view("home",compact("data","data2","user","count"));
     }
 
     public function redireacts(){
@@ -64,4 +69,63 @@ class HomeController extends Controller{
         }
 
     }
+
+
+
+
+
+
+    public function showcart(Request $request,$id){
+
+        $count=Cart::where('user_id',$id)->count();
+
+        $data2=Cart::select('*')->where('user_id','=',$id)->get();
+
+        $data=Cart::where('user_id',$id)->join('food','carts.food_id','=','food.id')->get();
+
+
+        return view('showcart',compact('count','data','data2'));
+    }
+
+    public function remove($id){
+        $data=Cart::find($id);
+        $data->delete();
+
+        return redirect()->back();
+    }
+
+
+
+    public function order(){
+
+        return view('admin.order');
+    }
+
+    public function  orderconfirm(Request $request){
+
+        foreach($request->foodname as $key => $foodname)
+        {
+
+
+           $data=new Order;
+
+           $data->foodname=$foodname;
+           $data->price=$request->price[$key];
+           $data->quantity=$request->quantity[$key];
+
+           $data->name=$request->name;
+           $data->phone=$request->phone;
+           $data->address=$request->address;
+
+
+            $data->save();
+
+        }
+
+         return redirect()->back();
+
+     }
+
+
+
 }
